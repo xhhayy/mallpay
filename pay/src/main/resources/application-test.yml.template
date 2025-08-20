@@ -1,0 +1,32 @@
+# 测试环境配置模板
+# 使用前请复制为 application-test.yml 并填入实际配置信息
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: your_db_username
+    password: your_db_password
+    url: jdbc:mysql://localhost:3306/mall?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false
+  rabbitmq:
+    addresses: 127.0.0.1
+    port: 5672
+    username: your_rabbitmq_username
+    password: your_rabbitmq_password
+
+# PayConfig - 支付配置
+wx:
+  # 微信支付配置 - 请填入您的微信支付商户信息
+  appId: your_wx_app_id
+  mchId: your_wx_mch_id
+  mchKey: your_wx_mch_key
+  # 微信回调地址 - 请修改为您的实际域名
+  notifyUrl: "http://your-domain.com/pay/notify"
+  # 支付成功跳转地址 - 请修改为您的实际域名
+  returnUrl: "http://your-domain.com:8080/pay/payReturn"
+
+# 支付宝支付配置（如需要）
+# alipay:
+#   appId: your_alipay_app_id
+#   privateKey: your_alipay_private_key
+#   publicKey: your_alipay_public_key
+#   notifyUrl: "http://your-domain.com/pay/notify"
+#   returnUrl: "http://your-domain.com:8080/pay/payReturn"

@@ -1,0 +1,32 @@
+# 指定默认激活的环境
+spring:
+  profiles:
+    active: prod
+
+# 公共配置（所有环境共用）
+server:
+  port: 8080
+
+mybatis:
+  configuration:
+    # 下划线转驼峰命名映射
+    map-underscore-to-camel-case: true
+    # 控制台日志实现类
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  # Mapper XML 文件路径
+  mapper-locations: classpath:mappers/*.xml
+
+# 日志级别从低到高：TRACE < DEBUG < INFO < WARN < ERROR
+logging:
+  pattern:
+    console: "[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%thread] %-5level %logger{36} - %msg%n"  # 增加时间戳，更易追踪时序
+  level:
+    # 全局默认级别
+    root: INFO
+    # 打印Spring MVC请求细节（如URL、参数、响应）
+    org.springframework.web: DEBUG
+    # 打印MyBatis SQL执行细节（包括参数、结果）
+    org.mybatis: DEBUG
+    # 打印自定义业务代码的调试日志
+    com.imooc.mall: DEBUG
+
