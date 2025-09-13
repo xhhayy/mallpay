@@ -304,7 +304,7 @@ mvn integration-test
 
 - 提交 Issue
 - 发送邮件至：xhhayy@qq.com
-- 项目主页：https://github.com/your-username/mallpay
+- 项目主页：https://github.com/xhhayy/mallpay
 
 ---
 
