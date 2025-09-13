@@ -303,7 +303,7 @@ mvn integration-test
 如果您有任何问题或建议，请通过以下方式联系我们：
 
 - 提交 Issue
-- 发送邮件至：your-email@example.com
+- 发送邮件至：xhhayy@qq.com
 - 项目主页：https://github.com/your-username/mallpay
 
 ---
