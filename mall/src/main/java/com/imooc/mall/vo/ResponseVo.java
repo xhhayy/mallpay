@@ -44,7 +44,7 @@ public class ResponseVo<T> {
         return new ResponseVo<>(responseEnum.getCode(), responseEnum.getDesc());
     }
     public static <T>ResponseVo<T> error(ResponseEnum responseEnum,String msg){
-        return new ResponseVo<>(responseEnum.getCode(), responseEnum.getDesc());
+        return new ResponseVo<>(responseEnum.getCode(), msg);
     }
 
     public static <T>ResponseVo<T> error(ResponseEnum responseEnum, BindingResult bindingResult){

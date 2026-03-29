@@ -202,11 +202,28 @@
     <include refid="Base_Column_List" />
     from mall_order
     where user_id = #{uid,jdbcType=INTEGER}
+    order by create_time desc
   </select>
   <select id="selectByOrderNo" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from mall_order
     where order_no = #{orderNo,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectAllOrders" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from mall_order
+    order by create_time desc
+  </select>
+
+  <select id="countAll" resultType="java.lang.Integer">
+    select count(1) from mall_order
+  </select>
+
+  <select id="sumTotalPayment" resultType="java.math.BigDecimal">
+    select sum(payment) from mall_order
+    where status >= 20
   </select>
 </mapper>

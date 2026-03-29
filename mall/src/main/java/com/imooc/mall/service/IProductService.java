@@ -13,4 +13,6 @@ public interface IProductService {
     ResponseVo<PageInfo> products(Integer categoryId, Integer pageNum, Integer pageSize);//全部商品
 
     ResponseVo<ProductDetailVo> productDetail(Integer productId);//商品详细
+
+    int countAll();
 }

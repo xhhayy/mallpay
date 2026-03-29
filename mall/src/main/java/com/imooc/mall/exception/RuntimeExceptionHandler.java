@@ -25,6 +25,7 @@ public class RuntimeExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     @ResponseBody
     public ResponseVo handle(RuntimeException e) {
+        log.error("运行时异常: ", e);
         return ResponseVo.error(ERROR, e.getMessage());
     }
 

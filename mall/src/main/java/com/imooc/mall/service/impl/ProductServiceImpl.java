@@ -78,4 +78,9 @@ public class ProductServiceImpl implements IProductService {
         BeanUtils.copyProperties(product, productDetailVo);
         return ResponseVo.success(productDetailVo);
     }
+
+    @Override
+    public int countAll() {
+        return productMapper.countAll();
+    }
 }

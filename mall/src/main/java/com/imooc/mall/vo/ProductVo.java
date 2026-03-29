@@ -18,8 +18,12 @@ public class ProductVo {
     private String name;
 
     private String subtitle;
+    
     private String mainImage;
+    
     private Integer status;
+    
     private BigDecimal price;
-
+    
+    private Integer stock;
 }

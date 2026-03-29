@@ -2,7 +2,7 @@ package com.imooc.mall.service.impl;
 
 import com.github.pagehelper.PageInfo;
 import com.imooc.mall.MallApplicationTests;
-import com.imooc.mall.from.ShippingFrom;
+import com.imooc.mall.form.ShippingForm;
 import com.imooc.mall.service.IShippingService;
 import com.imooc.mall.vo.ResponseVo;
 import lombok.extern.slf4j.Slf4j;
@@ -29,16 +29,15 @@ public class ShippingServiceImplTest extends MallApplicationTests {
 
     @Test
     public void addShipping() {
-        ShippingFrom shippingFrom = new ShippingFrom();
-        shippingFrom.setReceiverName("徐伟翔");
-        shippingFrom.setReceiverPhone("020");
-        shippingFrom.setReceiverMobile("18322862912");
-        shippingFrom.setReceiverProvince("江西");
-        shippingFrom.setReceiverCity("江西省");
-        shippingFrom.setReceiverDistrict("南昌市");
-        shippingFrom.setReceiverAddress("乐平村");
-        shippingFrom.setReceiverZip("333300");
-        ResponseVo<Map<String, Integer>> list = shippingService.addShipping(1, shippingFrom);
+        ShippingForm shippingForm = new ShippingForm();
+        shippingForm.setReceiverName("徐伟翔");
+        shippingForm.setReceiverPhone("18322862912");
+        shippingForm.setReceiverProvince("江西");
+        shippingForm.setReceiverCity("江西省");
+        shippingForm.setReceiverDistrict("南昌市");
+        shippingForm.setReceiverAddress("乐平村");
+        shippingForm.setReceiverZip("333300");
+        ResponseVo<Map<String, Integer>> list = shippingService.addShipping(1, shippingForm);
         log.info("list={}"+list);
 
     }
@@ -50,16 +49,15 @@ public class ShippingServiceImplTest extends MallApplicationTests {
 
     @Test
     public void update() {
-        ShippingFrom shippingFrom = new ShippingFrom();
-        shippingFrom.setReceiverName("许思雨");
-        shippingFrom.setReceiverPhone("020");
-        shippingFrom.setReceiverMobile("18322862912");
-        shippingFrom.setReceiverProvince("江西");
-        shippingFrom.setReceiverCity("江西省");
-        shippingFrom.setReceiverDistrict("南昌市");
-        shippingFrom.setReceiverAddress("乐平村");
-        shippingFrom.setReceiverZip("333300");
-        ResponseVo update = shippingService.update(1, 16, shippingFrom);
+        ShippingForm shippingForm = new ShippingForm();
+        shippingForm.setReceiverName("许思雨");
+        shippingForm.setReceiverPhone("18322862912");
+        shippingForm.setReceiverProvince("江西");
+        shippingForm.setReceiverCity("江西省");
+        shippingForm.setReceiverDistrict("南昌市");
+        shippingForm.setReceiverAddress("乐平村");
+        shippingForm.setReceiverZip("333300");
+        ResponseVo update = shippingService.update(1, 16, shippingForm);
         log.info("list={}"+update);
 
     }

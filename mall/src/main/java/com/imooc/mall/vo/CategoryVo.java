@@ -18,6 +18,8 @@ public class CategoryVo {
     private String name;
 
     private Integer sortOrder;
+    
+    private Boolean status;
 
     private List<CategoryVo> subCategories;   //递归
 

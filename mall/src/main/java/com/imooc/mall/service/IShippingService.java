@@ -1,7 +1,7 @@
 package com.imooc.mall.service;
 
 import com.github.pagehelper.PageInfo;
-import com.imooc.mall.from.ShippingFrom;
+import com.imooc.mall.form.ShippingForm;
 import com.imooc.mall.vo.ResponseVo;
 
 import java.util.Map;
@@ -14,11 +14,11 @@ import java.util.Map;
 public interface IShippingService {
 
 
-    ResponseVo<Map<String,Integer>> addShipping(Integer uid, ShippingFrom shippingFrom);//添加地址
+    ResponseVo<Map<String,Integer>> addShipping(Integer uid, ShippingForm shippingForm);//添加地址
 
     ResponseVo delete(Integer uid,Integer shippingId);//删除地址
 
-    ResponseVo update(Integer uid,Integer shippingId,ShippingFrom shippingFrom);//更新地址
+    ResponseVo update(Integer uid,Integer shippingId,ShippingForm shippingForm);//更新地址
     ResponseVo<PageInfo> selectAll(Integer uid, Integer pageNum, Integer pageSize);//查看所有地址
 
 

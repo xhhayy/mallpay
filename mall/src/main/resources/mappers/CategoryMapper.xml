@@ -119,6 +119,14 @@
     select
     <include refid="Base_Column_List" />
     from mall_category
+    order by sort_order desc, id asc
+  </select>
+
+  <select id="selectAllEnabled" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from mall_category
     where status = 1
+    order by sort_order desc, id asc
   </select>
 </mapper>

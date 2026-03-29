@@ -1,30 +1,39 @@
-# MallPay 电商系统
+# 闪购无忧商城
 
 [![Java](https://img.shields.io/badge/Java-1.8+-orange.svg)](https://www.oracle.com/java/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-2.1.7-brightgreen.svg)](https://spring.io/projects/spring-boot)
 [![MySQL](https://img.shields.io/badge/MySQL-5.7+-blue.svg)](https://www.mysql.com/)
 [![Redis](https://img.shields.io/badge/Redis-3.0+-red.svg)](https://redis.io/)
+[![Vue](https://img.shields.io/badge/Vue-3.4-brightgreen.svg)](https://vuejs.org/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+> 闪电购物，无忧体验 ⚡
 
 ## 📖 项目简介
 
-MallPay 是一个基于 Spring Boot 的现代化电商系统，采用微服务架构设计。系统包含商城核心服务和支付服务两个主要模块，提供完整的电商功能，包括用户管理、商品管理、购物车、订单处理和支付功能。
+闪购无忧商城是一个基于 Spring Boot + Vue 3 的现代化电商系统，采用前后端分离架构设计。系统包含商城核心服务和支付服务两个主要模块，提供完整的电商功能，包括用户管理、商品管理、购物车、订单处理和支付功能。
 
 ## 🏗️ 系统架构
 
 ```
-mallpay/
-├── mall/          # 商城核心服务 (端口: 9090)
+flash-buy-mall/
+├── mall/                    # 商城核心服务 (端口: 9090)
 │   ├── 用户管理
 │   ├── 商品管理
 │   ├── 购物车功能
 │   ├── 订单管理
 │   └── 收货地址管理
-└── pay/           # 支付服务
-    ├── 支付创建
-    ├── 支付通知
-    ├── 支付查询
-    └── 支付回调
+├── pay/                     # 支付服务
+│   ├── 支付创建
+│   ├── 支付通知
+│   ├── 支付查询
+│   └── 支付回调
+└── mall-vue3-frontend/      # Vue3 前端 (端口: 3000)
+    ├── 用户界面
+    ├── 商品展示
+    ├── 购物车
+    ├── 订单管理
+    └── 个人中心
 ```
 
 ## 🛠️ 技术栈
@@ -48,23 +57,28 @@ mallpay/
 
 ### 环境要求
 
+**后端：**
 - JDK 1.8+
 - Maven 3.6+
 - MySQL 5.7+
 - Redis 3.0+
 - RabbitMQ 3.6+
 
+**前端：**
+- Node.js 16+
+- npm 7+
+
 ### 安装步骤
 
 1. **克隆项目**
    ```bash
-   git clone https://github.com/your-username/mallpay.git
-   cd mallpay
+   git clone <repository-url>
+   cd flash-buy-mall
    ```
 
 2. **数据库配置**
-   - 创建数据库 `mallpay`
-   - 导入数据库脚本（位于各模块的 `sql` 目录）
+   - 创建数据库 `mall`
+   - 导入数据库脚本（位于 `mall/sql/` 目录）
    - 修改 `application.yml` 中的数据库连接配置
 
 3. **Redis 配置**
@@ -86,26 +100,26 @@ mallpay/
    mvn clean package
    ```
 
-6. **启动服务**
+6. **启动后端服务**
    ```bash
-   # 启动支付服务
-   java -jar pay/target/pay.jar
-   
    # 启动商城服务
-   java -jar mall/target/mall.jar
+   cd mall
+   mvn spring-boot:run
    ```
 
-### 开发环境启动
+7. **启动前端服务**
+   ```bash
+   # 安装依赖
+   cd mall-vue3-frontend
+   npm install
+   
+   # 启动开发服务器
+   npm run dev
+   ```
 
-```bash
-# 启动 mall 模块
-cd mall
-mvn spring-boot:run
-
-# 启动 pay 模块
-cd pay
-mvn spring-boot:run
-```
+8. **访问应用**
+   - 前端地址：http://localhost:3000
+   - 后端地址：http://localhost:9090
 
 ## 📚 API 文档
 

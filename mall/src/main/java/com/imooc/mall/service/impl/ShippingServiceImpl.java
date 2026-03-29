@@ -4,7 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.imooc.mall.dao.ShippingMapper;
 import com.imooc.mall.enums.ResponseEnum;
-import com.imooc.mall.from.ShippingFrom;
+import com.imooc.mall.form.ShippingForm;
 import com.imooc.mall.pojo.Shipping;
 import com.imooc.mall.service.IShippingService;
 import com.imooc.mall.vo.ResponseVo;
@@ -27,9 +27,9 @@ public class ShippingServiceImpl implements IShippingService {
     private ShippingMapper shippingMapper;
 
     @Override//添加地址
-    public ResponseVo<Map<String,Integer>> addShipping(Integer uid, ShippingFrom shippingFrom) {
+    public ResponseVo<Map<String,Integer>> addShipping(Integer uid, ShippingForm shippingForm) {
         Shipping shipping = new Shipping();
-        BeanUtils.copyProperties(shippingFrom,shipping);
+        BeanUtils.copyProperties(shippingForm,shipping);
         shipping.setUserId(uid);
         int insert = shippingMapper.insertSelective(shipping);
 
@@ -53,9 +53,9 @@ public class ShippingServiceImpl implements IShippingService {
     }
 
     @Override//更新地址
-    public ResponseVo update(Integer uid, Integer shippingId, ShippingFrom shippingFrom) {
+    public ResponseVo update(Integer uid, Integer shippingId, ShippingForm shippingForm) {
         Shipping shipping = shippingMapper.selectByUidAndShippingId(uid, shippingId);
-        BeanUtils.copyProperties(shippingFrom,shipping);
+        BeanUtils.copyProperties(shippingForm,shipping);
 
         int i = shippingMapper.updateByPrimaryKeySelective(shipping);
         if(i == 0){

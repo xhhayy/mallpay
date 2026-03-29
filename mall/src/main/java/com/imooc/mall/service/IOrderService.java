@@ -22,4 +22,8 @@ public interface IOrderService {
     void paid(Long orderNo);//修改订单状态
 
     void cancelOrder(Long orderId);//取消订单
+
+    int countAll();
+
+    java.math.BigDecimal sumTotalPayment();
 }

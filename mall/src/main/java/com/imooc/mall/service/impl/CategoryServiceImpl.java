@@ -30,9 +30,9 @@ public class CategoryServiceImpl implements ICategoryService {
     @Override
     public ResponseVo<List<CategoryVo>> selectAll() {
         List<CategoryVo> categoryVoList = new ArrayList<>();
-        //查出所有类别
-        List<Category> categories = categoryMapper.selectAll();
-        //查出parent_id=0,查询父目录           一级目录：categoryVoList
+        //查出所有启用的类别
+        List<Category> categories = categoryMapper.selectAllEnabled();
+        //查出parent_id=0,查询父目录           一级目录:categoryVoList
         for (Category category : categories) {
             if (category.getParentId().equals(MallConst.ROOT_PARENT_ID)) {
                 CategoryVo categoryVo = new CategoryVo();
@@ -78,11 +78,11 @@ public class CategoryServiceImpl implements ICategoryService {
                     BeanUtils.copyProperties(category, categoryVo1);
                     subCategoryVoList.add(categoryVo1);
                 }
-                //对子目录按照sortOrder进行排序，数字越大排前面
-                subCategoryVoList.sort(Comparator.comparing(CategoryVo::getSortOrder).reversed());
-                categoryVo.setSubCategories(subCategoryVoList);
-                findSubCategory(subCategoryVoList, categories);//继续查子目录的子目录
             }
+            //对子目录按照sortOrder进行排序，数字越大排前面
+            subCategoryVoList.sort(Comparator.comparing(CategoryVo::getSortOrder).reversed());
+            categoryVo.setSubCategories(subCategoryVoList);
+            findSubCategory(subCategoryVoList, categories);//继续查子目录的子目录
         }
     }
 }

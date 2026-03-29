@@ -3,8 +3,8 @@ package com.imooc.mall.service.impl;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.imooc.mall.MallApplicationTests;
-import com.imooc.mall.from.CartAddFrom;
-import com.imooc.mall.from.CartUpdateFrom;
+import com.imooc.mall.form.CartAddForm;
+import com.imooc.mall.form.CartUpdateForm;
 import com.imooc.mall.service.ICartService;
 import com.imooc.mall.vo.CartVo;
 import com.imooc.mall.vo.ResponseVo;
@@ -26,7 +26,7 @@ public class CartServiceImplTest extends MallApplicationTests {
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
     @Test
     public void cartAdd() {
-        ResponseVo<CartVo> list = cartService.cartAdd(1, new CartAddFrom(27));
+        ResponseVo<CartVo> list = cartService.cartAdd(1, new CartAddForm(27));
         log.info("list={}", gson.toJson(list));
     }
 
@@ -39,10 +39,10 @@ public class CartServiceImplTest extends MallApplicationTests {
 
     @Test
     public void update() {
-        CartUpdateFrom cartUpdateFrom = new CartUpdateFrom();
-        cartUpdateFrom.setQuantity(10);
-        cartUpdateFrom.setSelected(false);
-        ResponseVo<CartVo> list = cartService.update(1,26,cartUpdateFrom);
+        CartUpdateForm cartUpdateForm = new CartUpdateForm();
+        cartUpdateForm.setQuantity(10);
+        cartUpdateForm.setSelected(false);
+        ResponseVo<CartVo> list = cartService.update(1,26,cartUpdateForm);
         log.info("list={}", gson.toJson(list));
     }
 

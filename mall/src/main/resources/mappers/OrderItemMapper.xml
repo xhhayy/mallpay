@@ -193,4 +193,11 @@
       </if>
     </where>
   </select>
+
+  <select id="selectByOrderNo" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from mall_order_item
+    where order_no = #{orderNo,jdbcType=BIGINT}
+  </select>
 </mapper>

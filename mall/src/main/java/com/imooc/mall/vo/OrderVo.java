@@ -15,6 +15,8 @@ import java.util.List;
 @Data
 public class OrderVo {
     private Long orderNo;
+    
+    private Integer userId;
 
     private BigDecimal payment;
 

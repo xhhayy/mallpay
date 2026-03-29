@@ -109,4 +109,23 @@ public class PayServiceImpl implements IPayService {
     public PayInfo queryByOrderId(String orderId) {
         return payInfoMapper.selectByOrderNo(Long.parseLong(orderId));
     }
+    
+    /**
+     * 创建支付记录（用于模拟支付）
+     */
+    public void createPayInfo(PayInfo payInfo) {
+        payInfoMapper.insertSelective(payInfo);
+        log.info("创建支付记录成功, orderNo={}", payInfo.getOrderNo());
+    }
+    
+    /**
+     * 更新支付记录（用于模拟支付）
+     */
+    public void updatePayInfo(PayInfo payInfo) {
+        payInfoMapper.updateByPrimaryKeySelective(payInfo);
+        
+        // 发送 MQ 消息通知 mall 服务
+        amqpTemplate.convertAndSend(QUEUE_PAY_NOTIFY, new Gson().toJson(payInfo));
+        log.info("已发送 MQ 消息, payInfo={}", payInfo);
+    }
 }

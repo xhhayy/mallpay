@@ -43,6 +43,8 @@ public enum ResponseEnum {
 
     ORDER_STATUS_ERROR(20, "订单状态有误"),
 
+    NEED_ADMIN(21, "需要管理员权限"),
+
     ;
 
     Integer code;

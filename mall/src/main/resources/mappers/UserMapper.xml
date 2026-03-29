@@ -170,4 +170,8 @@
     from mall_user
     where username = #{username,jdbcType=VARCHAR}
   </select>
+
+  <select id="countAll" resultType="java.lang.Integer">
+    select count(1) from mall_user
+  </select>
 </mapper>

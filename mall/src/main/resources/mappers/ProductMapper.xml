@@ -200,4 +200,23 @@
       </if>
     </where>
   </select>
+
+  <select id="selectAllProducts" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from mall_product
+    <where>
+      <if test="categoryIdSet != null and categoryIdSet.size() > 0">
+        category_id in
+        <foreach collection="categoryIdSet" item="item" index="index" open="(" separator="," close=")">
+          #{item}
+        </foreach>
+      </if>
+    </where>
+    order by create_time desc
+  </select>
+
+  <select id="countAll" resultType="java.lang.Integer">
+    select count(1) from mall_product
+  </select>
 </mapper>

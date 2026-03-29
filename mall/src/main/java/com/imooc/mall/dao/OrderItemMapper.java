@@ -23,4 +23,6 @@ public interface OrderItemMapper {
     int batchInsert(@Param("orderItemList") List<OrderItem> orderItemList);//把数据批量写入
 
     List<OrderItem> selectByOrderNoSet(@Param("orderNoSet") Set orderNoSet);
+
+    List<OrderItem> selectByOrderNo(@Param("orderNo") Long orderNo);
 }

@@ -1,7 +1,7 @@
 # 指定默认激活的环境
 spring:
   profiles:
-    active: prod
+    active: test
 
 # 公共配置（所有环境共用）
 server:
@@ -29,4 +29,3 @@ logging:
     org.mybatis: DEBUG
     # 打印自定义业务代码的调试日志
     com.imooc.mall: DEBUG
-

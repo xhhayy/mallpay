@@ -3,13 +3,20 @@ package com.imooc.mall.service.impl;
 import com.imooc.mall.dao.UserMapper;
 import com.imooc.mall.enums.RoleEnum;
 import com.imooc.mall.pojo.User;
+import com.imooc.mall.pojo.UserLoginInfo;
 import com.imooc.mall.service.IUserService;
+import com.imooc.mall.util.JwtUtil;
+import com.imooc.mall.util.RedisUtil;
 import com.imooc.mall.vo.ResponseVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static com.imooc.mall.enums.ResponseEnum.*;
 
@@ -22,6 +29,9 @@ import static com.imooc.mall.enums.ResponseEnum.*;
 public class UserServiceImpl implements IUserService {
     @Autowired
     private UserMapper userMapper;
+    
+    @Autowired
+    private RedisUtil redisUtil;
     /**
      * 注册
      */
@@ -50,10 +60,11 @@ public class UserServiceImpl implements IUserService {
         return ResponseVo.success();
     }
     /**
-     * 登录
+     * 登录并生成Token，存储到Redis
      */
     @Override
-    public ResponseVo<User> login(String username, String password) {
+    public ResponseVo<Map<String, Object>> login(String username, String password) {
+        // 账号密码校验
         User user = userMapper.selectByUsername(username);
         if (user == null) {
             //用户不存在(返回：用户名或密码错误)
@@ -65,10 +76,57 @@ public class UserServiceImpl implements IUserService {
             return ResponseVo.error(USERNAME_OR_PASSWORD_ERROR);
         }
         user.setPassword("");
-        return ResponseVo.success(user);
+        
+        // 生成 Token
+        String token = JwtUtil.generateToken(user.getId(), user.getUsername());
+        
+        // 准备用户权限信息
+        List<String> permissions = new ArrayList<>();
+        if (user.getRole() == RoleEnum.ADMIN.getCode()) {
+            // 管理员权限
+            permissions.add("admin:manage");
+            permissions.add("admin:category:manage");
+            permissions.add("admin:product:manage");
+            permissions.add("admin:order:manage");
+            permissions.add("admin:user:manage");
+        } else {
+            // 普通用户权限
+            permissions.add("user:cart:manage");
+            permissions.add("user:order:manage");
+            permissions.add("user:address:manage");
+        }
+        
+        // 计算过期时间
+        long expireTime = System.currentTimeMillis() + 24 * 60 * 60 * 1000; // 24小时
+        
+        // 创建用户登录信息
+        UserLoginInfo loginInfo = new UserLoginInfo(
+                user.getId(),
+                user.getUsername(),
+                token,
+                user.getRole(),
+                permissions,
+                expireTime
+        );
+        
+        // 存储到Redis
+        String userKey = RedisUtil.generateUserKey(user.getId());
+        redisUtil.set(userKey, loginInfo, 24 * 60 * 60); // 24小时过期
+        
+        // 返回 Token 和用户信息
+        Map<String, Object> data = new HashMap<>();
+        data.put("token", token);
+        data.put("user", user);
+        
+        return ResponseVo.success(data);
     }
 
-    private void error() {
-        throw new RuntimeException("意外错误");
+    /**
+     * 返回用户总数
+     * @return
+     */
+    @Override
+    public int countAll() {
+        return userMapper.countAll();
     }
 }

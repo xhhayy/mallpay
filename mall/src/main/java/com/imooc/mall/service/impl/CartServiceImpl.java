@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 import com.imooc.mall.dao.ProductMapper;
 import com.imooc.mall.enums.ProductDetailEnum;
 import com.imooc.mall.enums.ResponseEnum;
-import com.imooc.mall.from.CartAddFrom;
-import com.imooc.mall.from.CartUpdateFrom;
+import com.imooc.mall.form.CartAddForm;
+import com.imooc.mall.form.CartUpdateForm;
 import com.imooc.mall.pojo.Cart;
 import com.imooc.mall.pojo.Product;
 import com.imooc.mall.service.ICartService;
@@ -21,8 +21,11 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author 小浣浣
@@ -46,11 +49,11 @@ public class CartServiceImpl implements ICartService {
      *添加购物车
      */
     @Override
-    public ResponseVo<CartVo> cartAdd(Integer uid, CartAddFrom cArtAddFrom) {
+    public ResponseVo<CartVo> cartAdd(Integer uid, CartAddForm cartAddForm) {
         Integer quantity = 1;//商品添加进购物车的数量默认为1
 
         // 商品是否存在
-        Product product = productMapper.selectByPrimaryKey(cArtAddFrom.getProductId());
+        Product product = productMapper.selectByPrimaryKey(cartAddForm.getProductId());
         if (product == null) {
             return ResponseVo.error(ResponseEnum.PRODUCT_NOT_EXIST);
         }
@@ -76,7 +79,7 @@ public class CartServiceImpl implements ICartService {
         String value = opsForHash.get(redisKey, String.valueOf(product.getId()));
         if (StringUtil.isNullOrEmpty(value)) {//是否为空
             //没有该商品
-            cart = new Cart(product.getId(), quantity, cArtAddFrom.getSelected());
+            cart = new Cart(product.getId(), quantity, cartAddForm.getSelected());
         } else {
             //有该商品，数量+1
             cart = gson.fromJson(value, Cart.class);//json格式-->cart对象
@@ -105,13 +108,26 @@ public class CartServiceImpl implements ICartService {
         BigDecimal cartTotalPrice = BigDecimal.ZERO;//总价格
         Integer cartTotalQuantity = 0;//总数量
         List<CartProductVo> cartProductVoList = new ArrayList<>();
+
+        // 收集所有productId
+        Set<Integer> productIdSet = new HashSet<>();
+        for (Map.Entry<String, String> entry : entries.entrySet()) {
+            productIdSet.add(Integer.valueOf(entry.getKey()));
+        }
+
+        // 批量查询商品信息
+        List<Product> productList = productMapper.selectByProductIdSet(productIdSet);
+        // 将List转换为Map，方便查找
+        Map<Integer, Product> productMap = new HashMap<>();
+        for (Product product : productList) {
+            productMap.put(product.getId(), product);
+        }
+
         for (Map.Entry<String, String> entry : entries.entrySet()) {
             Integer productId = Integer.valueOf(entry.getKey());
             Cart cart = gson.fromJson(entry.getValue(), Cart.class);
 
-            //TODO 需要优化，用mysql里的in
-
-            Product product = productMapper.selectByPrimaryKey(productId);
+            Product product = productMap.get(productId);
 
             if (product != null) {
                 CartProductVo cartProductVo = new CartProductVo(product.getId(), cart.getQuantity(),
@@ -128,8 +144,11 @@ public class CartServiceImpl implements ICartService {
                 if (cart.getProductSelected()) {
                     cartTotalPrice = cartTotalPrice.add(cartProductVo.getProductTotalPrice());
                 }
+                cartTotalQuantity += cart.getQuantity();
+            } else {
+                // 商品不存在，从Redis中删除
+                opsForHash.delete(redisKey, String.valueOf(productId));
             }
-            cartTotalQuantity += cart.getQuantity();
         }
         cartVo.setCartProductVoList(cartProductVoList);
         //有一个没有选中，就不是全选
@@ -142,7 +161,7 @@ public class CartServiceImpl implements ICartService {
      *更新购物车
      */
     @Override
-    public ResponseVo<CartVo> update(Integer uid, Integer productId, CartUpdateFrom from) {
+    public ResponseVo<CartVo> update(Integer uid, Integer productId, CartUpdateForm cartUpdateForm) {
         //把redis里面的数据读取出来
         HashOperations<String, String, String> opsForHash = redisTemplates.opsForHash();
         String redisKey = String.format(CART_REDIS_KEY_TEMPLATE, uid);
@@ -155,11 +174,11 @@ public class CartServiceImpl implements ICartService {
 
         Cart cart = gson.fromJson(value, Cart.class);
         //有该商品，修改数量,判断传进进来的参数不为空才修改
-        if (from.getQuantity() != null && from.getQuantity() > 0) {
-            cart.setQuantity(from.getQuantity());
+        if (cartUpdateForm.getQuantity() != null && cartUpdateForm.getQuantity() > 0) {
+            cart.setQuantity(cartUpdateForm.getQuantity());
         }
-        if (from.getSelected() != null) {
-            cart.setProductSelected(from.getSelected());
+        if (cartUpdateForm.getSelected() != null) {
+            cart.setProductSelected(cartUpdateForm.getSelected());
         }
         //把修改后的数据重新写入redis
         opsForHash.put(redisKey,
@@ -218,12 +237,14 @@ public class CartServiceImpl implements ICartService {
     public ResponseVo<Integer> sum(Integer uid) {
         HashOperations<String, String, String> opsForHash = redisTemplates.opsForHash();
         String redisKey = String.format(CART_REDIS_KEY_TEMPLATE, uid);
-        Integer sum = 0;
         Map<String, String> entries = opsForHash.entries(redisKey);
-        for (Map.Entry<String, String> entry : entries.entrySet()) {
-            Cart cart = gson.fromJson(entry.getValue(), Cart.class);
+
+        Integer sum = 0;
+        for (String value : entries.values()) {
+            Cart cart = gson.fromJson(value, Cart.class);
             sum += cart.getQuantity();
         }
+
         return ResponseVo.success(sum);
     }
 

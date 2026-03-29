@@ -14,8 +14,6 @@ public class Shipping {
 
     private String receiverPhone;
 
-    private String receiverMobile;
-
     private String receiverProvince;
 
     private String receiverCity;
@@ -25,6 +23,8 @@ public class Shipping {
     private String receiverAddress;
 
     private String receiverZip;
+
+    private Integer isDefault;
 
     private Date createTime;
 

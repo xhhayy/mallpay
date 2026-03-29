@@ -11,6 +11,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Map;
+
 /**
  * @author 小浣浣
  * @verson 1.0
@@ -30,7 +32,7 @@ public class UserServiceImplTest extends MallApplicationTests {
 
     @Test
     public void login() {
-        ResponseVo<User> responseVo = userService.login("Tom","123456" );
+        ResponseVo<Map<String, Object>> responseVo = userService.login("Tom","123456" );
         Assert.assertEquals(ResponseEnum.SUCCESS.getCode(), responseVo.getStatus());
     }
 }

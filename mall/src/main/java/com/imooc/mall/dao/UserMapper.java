@@ -22,4 +22,5 @@ public interface UserMapper {
 
     User selectByUsername(String username);
 
+    int countAll();
 }

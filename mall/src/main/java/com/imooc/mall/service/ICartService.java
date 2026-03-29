@@ -1,7 +1,7 @@
 package com.imooc.mall.service;
 
-import com.imooc.mall.from.CartAddFrom;
-import com.imooc.mall.from.CartUpdateFrom;
+import com.imooc.mall.form.CartAddForm;
+import com.imooc.mall.form.CartUpdateForm;
 import com.imooc.mall.pojo.Cart;
 import com.imooc.mall.vo.CartVo;
 import com.imooc.mall.vo.ResponseVo;
@@ -16,11 +16,11 @@ import java.util.List;
 
 public interface ICartService {
 
-    ResponseVo<CartVo> cartAdd(Integer uid,CartAddFrom cArtAddFrom);//添加购物车
+    ResponseVo<CartVo> cartAdd(Integer uid,CartAddForm cartAddForm);//添加购物车
 
     ResponseVo<CartVo> list(Integer uid);
 
-    ResponseVo<CartVo> update(Integer uid, Integer productId, CartUpdateFrom cartUpdateFrom);//更新购物车
+    ResponseVo<CartVo> update(Integer uid, Integer productId, CartUpdateForm cartUpdateForm);//更新购物车
 
     ResponseVo<CartVo> delete(Integer uid, Integer productId);//从购物车中移除某个商品
 

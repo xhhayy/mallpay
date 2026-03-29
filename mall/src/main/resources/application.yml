@@ -6,6 +6,9 @@ spring:
 # 公共配置（所有环境共用）
 server:
   port: 9090
+  servlet:
+    session:
+      timeout: 86400  # 24小时（单位：秒）
 
 mybatis:
   configuration:

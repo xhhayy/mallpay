@@ -3,6 +3,8 @@ package com.imooc.mall.service;
 import com.imooc.mall.pojo.User;
 import com.imooc.mall.vo.ResponseVo;
 
+import java.util.Map;
+
 /**
  * @author 小浣浣
  * @verson 1.0
@@ -17,8 +19,9 @@ public interface IUserService {
      */
     ResponseVo<User> register(User user);
     /**
-     *登录
+     *登录并生成Token，存储到Redis
      */
-    ResponseVo<User> login(String username,String password);
+    ResponseVo<Map<String, Object>> login(String username, String password);
 
+    int countAll();
 }
